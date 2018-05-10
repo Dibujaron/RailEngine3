@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scenes/track/TrackCurve.gd" type="Script" id=1]
+[ext_resource path="res://scenes/track/TrackPoint.tscn" type="PackedScene" id=2]
+
+[node name="TrackCurve" type="Node2D" index="0"]
+
+position = Vector2( 200, 200 )
+rotation = 0.785398
+script = ExtResource( 1 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="PointA" parent="." index="0" instance=ExtResource( 2 )]
+
+position = Vector2( 0, 0 )
+
+[node name="PointB" parent="." index="1" instance=ExtResource( 2 )]
+
+position = Vector2( 200, 150 )
+
+

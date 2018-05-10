@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scenes/track/TrackPoint.gd" type="Script" id=1]
+
+[node name="TrackPoint" type="Node2D"]
+
+position = Vector2( 100, 100 )
+script = ExtResource( 1 )
+_sections_unfolded = [ "Material", "Transform" ]
+
+
