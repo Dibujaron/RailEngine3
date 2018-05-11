@@ -12,7 +12,7 @@ var angle_b_local = 0
 var center_to_a = null
 var center_to_b = null
 var ARC_COLOR = Color(0.5,0.5,0)
-var SEG_LENGTH = 5
+var SEG_LENGTH_MAX = 5
 
 var ready = false
 
@@ -44,31 +44,47 @@ func calculate_curve(): #work in only local coordinates.
 	center_to_b = b_pos - center_local
 	angle_a_local = center_to_a.angle()
 	angle_b_local = center_to_b.angle()
-	
-	print("Center to A angle: ", angle_a_local)
-	print("Center to B angle: ", angle_b_local)
-	b.rotation = (center_to_b).tangent().angle()
+
 	a.position = Vector2(0,0)
 	a.rotation = 0
+	
+	var sweep_angle = angle_b_local - angle_a_local
+	b.rotation = a.rotation + sweep_angle
 
 func _draw():
 	if ready:
 		draw_circle(center_local, 2, Color(1,0,0))
 		draw_line(center_local, center_local+center_to_a, Color(0,1,1)) #green/blue should go to A
 		draw_line(center_local, center_local+center_to_b, Color(1,1,0)) #yellow should go to B
+		draw_arc()
 		
-		draw_circle_arc(center_local, radius, angle_a_local, angle_b_local, ARC_COLOR)
+func draw_arc():
+	var start_angle = angle_a_local
+	var end_angle = angle_b_local
+	if(angle_b_local < angle_a_local):
+		start_angle = angle_b_local
+		end_angle = angle_a_local
 		
-func draw_circle_arc(center, radius, angle_from, angle_to, color):
-    var nb_points = 32
-    var points_arc = PoolVector2Array()
+	var angle_sweep = end_angle - start_angle
+	var arc_length = radius * angle_sweep
+	var n_segments = ceil(abs(arc_length) / SEG_LENGTH_MAX)
+	var increment = angle_sweep / n_segments
 
-    for i in range(nb_points+1):
-        var angle_point = angle_from + i * (angle_to-angle_from) / nb_points - PI
-        points_arc.push_back(center + Vector2(cos(angle_point), sin(angle_point)) * radius)
+	var angle = start_angle
+	
+	print("start angle is ", start_angle, " increment is ", increment, " and end angle is ", end_angle)
+	while angle+increment < end_angle:
+		var angle_next = angle+increment
+		var p1 = center_local + Vector2(cos(angle),sin(angle)) * radius
+		var p2 = center_local + Vector2(cos(angle_next),sin(angle_next)) * radius
+		draw_line(p1, p2, ARC_COLOR)
+		angle = angle_next
 
-    for index_point in range(nb_points):
-        draw_line(points_arc[index_point], points_arc[index_point + 1], color)
+	#draw one more line, possibly not the same length as the rest, to complete it.
+	var penultimate = center_local + Vector2(cos(angle),sin(angle)) * radius
+	var end_point = center_local + Vector2(cos(end_angle),sin(end_angle)) * radius
+	draw_line(penultimate, end_point, ARC_COLOR)
+	
 		
 func invert():
 	var b_pos = b.position

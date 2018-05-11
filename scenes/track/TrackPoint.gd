@@ -20,7 +20,7 @@ func _draw():
 
 	draw_line(pos, pos+tangent, TANGENT_COLOR) #draw the tangent in green
 	draw_circle(pos, 2, POSITION_COLOR) #draw the point first.
-	print("my global rotation is ", global_rotation_degrees, " and my local rotation is ", rotation_degrees)
+
 
 func heading():
 	return Vector2(cos(rotation),sin(rotation))
