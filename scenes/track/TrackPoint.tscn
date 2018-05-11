@@ -5,6 +5,7 @@
 [node name="TrackPoint" type="Node2D"]
 
 position = Vector2( 100, 100 )
+rotation = 1.0472
 script = ExtResource( 1 )
 _sections_unfolded = [ "Material", "Transform" ]
 

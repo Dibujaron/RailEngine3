@@ -11,16 +11,16 @@ const TANGENT_COLOR = Color(0,1,0)
 const DRAW_SCALE = 20
 
 func _draw():
-	print("Drawing!")
+
 	var pos = Vector2(0,0)
-	var heading = heading().normalized() * DRAW_SCALE
-	print("Heading is ", heading().normalized())
-	print("Drawing heading line from ", position, " to ", (position+heading))
-	draw_line(pos, pos+heading, HEADING_COLOR) #draw the heading
-	var tangent = heading.tangent().normalized() * DRAW_SCALE
-	print("Drawing tangent line ", heading.tangent().normalized() , " with angle ", heading.tangent().normalized().angle())
-	draw_line(pos, pos+tangent, TANGENT_COLOR) #draw the tangent
+	var heading = Vector2(0,1) * DRAW_SCALE
+
+	draw_line(pos, pos+heading, HEADING_COLOR) #draw the heading in red
+	var tangent = Vector2(1,0) * DRAW_SCALE
+
+	draw_line(pos, pos+tangent, TANGENT_COLOR) #draw the tangent in green
 	draw_circle(pos, 2, POSITION_COLOR) #draw the point first.
+	print("my global rotation is ", global_rotation_degrees, " and my local rotation is ", rotation_degrees)
 
 func heading():
 	return Vector2(cos(rotation),sin(rotation))

@@ -42,32 +42,29 @@ func calculate_curve(): #work in only local coordinates.
 	
 	center_to_a = a_pos - center_local
 	center_to_b = b_pos - center_local
-	print("Center to b is ", center_to_b.normalized(), " with angle ", center_to_b.normalized().angle())
 	angle_a_local = center_to_a.angle()
 	angle_b_local = center_to_b.angle()
 	
-	print("B's rotation angle being set to a heading of ", center_to_b.tangent().normalized())
-	b.rotation = center_to_b.tangent().angle()
+	print("Center to A angle: ", angle_a_local)
+	print("Center to B angle: ", angle_b_local)
+	b.rotation = (center_to_b).tangent().angle()
 	a.position = Vector2(0,0)
 	a.rotation = 0
-	
-	a.update()
-	b.update()
-	update()
 
 func _draw():
 	if ready:
 		draw_circle(center_local, 2, Color(1,0,0))
-		draw_line(center_local, center_local+center_to_a, Color(0,0,1))
-		draw_line(center_local, center_local+center_to_b, Color(0,0,1))
+		draw_line(center_local, center_local+center_to_a, Color(0,1,1)) #green/blue should go to A
+		draw_line(center_local, center_local+center_to_b, Color(1,1,0)) #yellow should go to B
+		
 		draw_circle_arc(center_local, radius, angle_a_local, angle_b_local, ARC_COLOR)
-			
+		
 func draw_circle_arc(center, radius, angle_from, angle_to, color):
     var nb_points = 32
     var points_arc = PoolVector2Array()
 
     for i in range(nb_points+1):
-        var angle_point = deg2rad(angle_from + i * (angle_to-angle_from) / nb_points - 90)
+        var angle_point = angle_from + i * (angle_to-angle_from) / nb_points - PI
         points_arc.push_back(center + Vector2(cos(angle_point), sin(angle_point)) * radius)
 
     for index_point in range(nb_points):
