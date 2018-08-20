@@ -11,7 +11,7 @@ func _ready():
 	var curve2 = get_node("Curve2")
 	var curve3 = get_node("Curve3")
 	var curve4 = get_node("Curve4")
-	
+	var straight1 = get_node("Straight1")
 	curve1.global_position = Vector2(100,200)
 	curve1.global_rotation = 0
 	get_node("Curve1/PointB").position = Vector2(50, 25)
@@ -31,6 +31,10 @@ func _ready():
 	curve4.global_rotation = 0
 	get_node("Curve4/PointB").position = Vector2(-50, -25)
 	curve4.calculate_curve()
+	
+	straight1.global_position = Vector2(800,200)
+	straight1.global_rotation = 25
+	get_node("Straight1/PointB").position = Vector2(-50, 25)
 #func _process(delta):
 #	# Called every frame. Delta is time since last frame.
 #	# Update game logic here.

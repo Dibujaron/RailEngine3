@@ -38,7 +38,7 @@ func calculate_curve(): #work in only local coordinates.
 	var to_center = a_tan * a_dist_center
 	
 	center_local = a_pos + to_center
-	radius = a_dist_center
+	radius = abs(a_dist_center)
 	
 	center_to_a = a_pos - center_local
 	center_to_b = b_pos - center_local
@@ -57,22 +57,27 @@ func _draw():
 		draw_line(center_local, center_local+center_to_a, Color(0,1,1)) #green/blue should go to A
 		draw_line(center_local, center_local+center_to_b, Color(1,1,0)) #yellow should go to B
 		draw_arc()
-		
+	
 func draw_arc():
 	var start_angle = angle_a_local
 	var end_angle = angle_b_local
-	if(angle_b_local < angle_a_local):
-		start_angle = angle_b_local
-		end_angle = angle_a_local
-		
+	
+	if start_angle > end_angle:
+		var temp = end_angle
+		end_angle = start_angle
+		start_angle = temp
 	var angle_sweep = end_angle - start_angle
+	if angle_sweep < 0:
+		print("ERR angle_sweep is ", angle_sweep, " must always be positive!")
+		return
 	var arc_length = radius * angle_sweep
-	var n_segments = ceil(abs(arc_length) / SEG_LENGTH_MAX)
+	var n_segments = ceil(arc_length / SEG_LENGTH_MAX)
 	var increment = angle_sweep / n_segments
+	if increment < 0:
+		print("ERR increment is ", increment, " must always be positive!")
+		return
 
 	var angle = start_angle
-	
-	print("start angle is ", start_angle, " increment is ", increment, " and end angle is ", end_angle)
 	while angle+increment < end_angle:
 		var angle_next = angle+increment
 		var p1 = center_local + Vector2(cos(angle),sin(angle)) * radius
@@ -84,8 +89,7 @@ func draw_arc():
 	var penultimate = center_local + Vector2(cos(angle),sin(angle)) * radius
 	var end_point = center_local + Vector2(cos(end_angle),sin(end_angle)) * radius
 	draw_line(penultimate, end_point, ARC_COLOR)
-	
-		
+
 func invert():
 	var b_pos = b.position
 	var b_hdg = b.rotation
